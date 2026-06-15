@@ -13,19 +13,30 @@ body{font-family:'Amiri','Cairo',sans-serif;background:var(--bg);color:var(--tex
 .hdr h1{font-size:1.4rem;font-weight:700}
 .hdr .sub{font-size:.8rem;opacity:.7;margin-top:2px}
 .c{max-width:700px;margin:0 auto;padding:0 14px}
-.srch{max-width:500px;margin:16px auto 0;display:flex;gap:6px}
+.srch{display:flex;gap:6px;margin:14px 0 4px;position:sticky;top:0;z-index:10;background:var(--bg);padding:6px 0}
 .srch input{flex:1;padding:12px 16px;border:2px solid var(--brd);border-radius:var(--rad);font-size:.95rem;direction:rtl;background:var(--surface);color:var(--text)}
 .srch input:focus{border-color:var(--gold);outline:none}
-.srch button{background:var(--primary);color:#fff;border:none;padding:12px 20px;border-radius:var(--rad);cursor:pointer;font-size:.85rem;font-weight:600}
+.srch button{background:var(--primary);color:#fff;border:none;padding:12px 20px;border-radius:var(--rad);cursor:pointer;font-size:.85rem;font-weight:600;font-family:inherit}
 .srch button:hover{opacity:.9}
-#status{font-size:.75rem;color:var(--txt3);text-align:center;padding:8px}
-#status .sp{width:24px;height:24px;border:2px solid var(--brd);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 4px}
+#status{font-size:.75rem;color:var(--txt3);text-align:center;padding:4px;margin:2px 0}
+#status .sp{width:20px;height:20px;border:2px solid var(--brd);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 4px}
 @keyframes spin{to{transform:rotate(360deg)}}
+.alg{background:var(--surface);border-radius:var(--rad);padding:14px;margin-top:8px;border:2px dashed var(--gold);text-align:center}
+.alg .alt{font-size:.82rem;color:var(--gold);font-weight:700;margin-bottom:6px}
+.alg form{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.alg input{padding:8px 12px;border:1px solid var(--brd);border-radius:6px;font-size:.85rem;width:180px;direction:rtl}
+.alg button{background:#0F3D7A;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:.8rem}
+.ft{font-size:.7rem;color:var(--txt3);text-align:center;margin-top:10px;padding:8px}
+.ft a{color:var(--primary);text-decoration:none}
+#ifr{width:100%;height:85vh;border:none;border-radius:var(--rad);display:none;margin-top:4px}
+#ifr.o{display:block}
+#ifr-loader{display:none;text-align:center;padding:20px;color:var(--txt3)}
+#ifr-loader .sp{width:24px;height:24px;border:2px solid var(--brd);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 6px}
 .card{background:var(--surface);border-radius:var(--rad);margin-bottom:8px;border-right:3px solid var(--primary);overflow:hidden}
 .card .ch{padding:10px 14px;display:flex;justify-content:space-between;align-items:flex-start;gap:6px;cursor:pointer}
 .card .ch:hover{background:var(--goldlt)}
 .card .ch .ct{font-size:.9rem;color:var(--primary);font-weight:600;flex:1;line-height:1.5}
-.card .ch .hukm{font-size:.6rem;font-weight:700;white-space:nowrap;padding:2px 6px;border-radius:4px;flex-shrink:0;margin-top:2px}
+.card .ch .hukm{font-size:.6rem;font-weight:700;white-space:nowrap;padding:2px 6px;border-radius:4px;flex-shrink:0}
 .card .cb{display:none;padding:4px 14px 12px;border-top:1px solid var(--brd)}
 .card .cb.o{display:block}
 .card .cb .sl{font-size:.68rem;color:var(--txt3);display:block;margin-bottom:2px}
@@ -34,13 +45,6 @@ body{font-family:'Amiri','Cairo',sans-serif;background:var(--bg);color:var(--tex
 #stats{font-size:.7rem;color:var(--txt3);text-align:center;margin:4px 0}
 .err-msg{color:#c62828;font-size:.85rem;text-align:center;padding:14px}
 .err-msg span{display:block;font-size:.75rem;color:var(--txt3);margin-top:4px}
-.alg{background:var(--surface);border-radius:var(--rad);padding:14px;margin-top:8px;border:2px dashed var(--gold);text-align:center}
-.alg .alt{font-size:.82rem;color:var(--gold);font-weight:700;margin-bottom:6px}
-.alg form{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
-.alg input{padding:8px 12px;border:1px solid var(--brd);border-radius:6px;font-size:.85rem;width:180px;direction:rtl}
-.alg button{background:#0F3D7A;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:.8rem}
-.ft{font-size:.7rem;color:var(--txt3);text-align:center;margin-top:20px}
-.ft a{color:var(--primary);text-decoration:none}
 </style>
 </head>
 <body>
@@ -56,6 +60,8 @@ body{font-family:'Amiri','Cairo',sans-serif;background:var(--bg);color:var(--tex
   <div id="status">🔎 اكتب كلمة واضغط بحث</div>
   <div id="stats"></div>
   <div id="results"></div>
+  <div id="ifr-loader"><div class="sp"></div><span>📖 جاري تحميل النتائج من الدرر السنية...</span></div>
+  <iframe id="ifr" sandbox="allow-scripts allow-forms allow-same-origin"></iframe>
   <div id="altBox" class="alg" style="display:none">
     <div class="alt">✅ بحث في موقع الدرر السنية (مضمون 100%)</div>
     <form action="https://dorar.net/hadith/search" target="_blank" method="get">
@@ -68,55 +74,58 @@ body{font-family:'Amiri','Cairo',sans-serif;background:var(--bg);color:var(--tex
 </div>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
-var _abort = null;
-function $(id){ return document.getElementById(id); }
-
 function doSearch(){
-  var q = $('#q').value.trim();
-  if(!q){ alert('📖 اكتب حديثاً'); return; }
-  $('#altQ').value = q;
-  $('altBox').style.display = 'none';
-  $('status').innerHTML = '<div class="sp"></div><span>📖 جاري البحث (4 Proxies)...</span>';
-  $('stats').innerHTML = '';
-  $('results').innerHTML = '';
-  if(_abort){ clearTimeout(_abort); _abort = null; }
-  tryProxiesParallel(q);
+  var q = document.getElementById('q').value.trim();
+  if(!q){ alert('📖 اكتب حديثاً للبحث'); return; }
+  document.getElementById('ifr').classList.remove('o');
+  document.getElementById('ifr-loader').style.display = 'none';
+  document.getElementById('altBox').style.display = 'none';
+  document.getElementById('altQ').value = q;
+  tryProxies(q);
 }
 
-function tryProxiesParallel(query){
+function tryProxies(query){
+  document.getElementById('status').innerHTML = '<div class="sp"></div><span>📖 جاري البحث (API)...</span>';
   var proxies = [
-    { name: 'AllOrigins', url: 'https://api.allorigins.win/raw?url=' },
     { name: 'CORSProxy.io', url: 'https://corsproxy.io/?' },
-    { name: 'CodeTabs', url: 'https://api.codetabs.com/v1/proxy?quest=' },
-    { name: 'CORSProxy.org', url: 'https://corsproxy.org/?' }
+    { name: 'AllOrigins', url: 'https://api.allorigins.win/raw?url=' },
+    { name: 'CodeTabs', url: 'https://api.codetabs.com/v1/proxy?quest=' }
   ];
   var apiUrl = 'https://dorar.net/dorar_api.json?skey=' + encodeURIComponent(query);
   var done = false, completed = 0;
-
   proxies.forEach(function(p){
-    fetch(p.url + encodeURIComponent(apiUrl), { signal: AbortSignal.timeout(12000) })
+    fetch(p.url + encodeURIComponent(apiUrl))
       .then(function(r){ if(!r.ok) throw new Error(); return r.json(); })
       .then(function(data){
         if(done) return; done = true;
-        clearTimeout(_abort); _abort = null;
-        var list = normalize(data);
+        var list = toStandard(data);
         if(list && list.length > 0){
-          $('status').innerHTML = '✅ ' + p.name + ' • ' + list.length + ' حديث';
+          document.getElementById('status').innerHTML = '✅ ' + p.name + ' • ' + list.length + ' حديث';
           showResults(list, query);
         } else { checkDone(); }
       })
       .catch(function(){ checkDone(); });
-    function checkDone(){ if(++completed >= proxies.length && !done) tryJSONP(query); }
+    function checkDone(){
+      completed++;
+      if(!done && completed >= proxies.length) showIframe(query);
+    }
   });
-
-  _abort = setTimeout(function(){ if(!done){ done=true; tryJSONP(query); } }, 25000);
+  setTimeout(function(){ if(!done){ done = true; showIframe(query); } }, 8000);
 }
 
-function normalize(data){
+function showIframe(query){
+  document.getElementById('status').innerHTML = '📖 نتائج من الدرر السنية';
+  document.getElementById('ifr-loader').style.display = 'block';
+  var ifr = document.getElementById('ifr');
+  ifr.classList.add('o');
+  ifr.src = 'https://dorar.net/hadith/search?q=' + encodeURIComponent(query) + '&st=w';
+  setTimeout(function(){ document.getElementById('ifr-loader').style.display = 'none'; }, 2000);
+}
+
+function toStandard(data){
   if(!data) return [];
-  if(data.data && Array.isArray(data.data)){
+  if(data.data && Array.isArray(data.data))
     return data.data.map(function(h){ return { th:h.hadith||'',rawi:h.rawi||'',src:h.book||'',hukm:h.grade||''}; }).filter(function(h){ return h.th; });
-  }
   if(data.ahadith){
     var a = data.ahadith.result || data.ahadith;
     if(typeof a === 'string') return parseHTML(a);
@@ -127,7 +136,7 @@ function normalize(data){
 
 function parseHTML(str){
   var list=[]; if(!str) return list;
-  var h=str.replace(/\\n/g,'\n').replace(/\\"/g,'"').replace(/\\\//g,'/');
+  var h=str.replace(/\\n/g,'\n').replace(/\\"/g,'"');
   var parts=h.split(/\n-{5,}\n/);
   for(var i=0;i<parts.length;i++){
     var p=parts[i]; if(!p.trim()) continue;
@@ -145,57 +154,37 @@ function parseHTML(str){
   return list;
 }
 
-function tryJSONP(query){
-  $('status').innerHTML = '<span>📖 جاري JSONP...</span>';
-  _abort = setTimeout(function(){ _abort=null; allFailed(query); }, 12000);
-  $.getJSON("http://dorar.net/dorar_api.json?skey="+encodeURIComponent(query)+"&callback=?", function(data){
-    clearTimeout(_abort); _abort=null;
-    var list = normalize(data);
-    if(list&&list.length){ $('status').innerHTML='✅ JSONP • '+list.length; showResults(list,query); }
-    else allFailed(query);
-  }).fail(function(){
-    $.getJSON("https://dorar.net/dorar_api.json?skey="+encodeURIComponent(query)+"&callback=?", function(data){
-      clearTimeout(_abort); _abort=null;
-      var list = normalize(data);
-      if(list&&list.length){ $('status').innerHTML='✅ JSONPS • '+list.length; showResults(list,query); }
-      else allFailed(query);
-    }).fail(function(){ clearTimeout(_abort); _abort=null; allFailed(query); });
-  });
+function showResults(list, query){
+  if(!list || !list.length){ showIframe(query); return; }
+  var html = '<div style="margin-bottom:4px;font-size:.7rem;color:var(--txt3)">' + list.length + ' نتيجة</div>';
+  for(var i = 0; i < Math.min(list.length, 20); i++){
+    var h = list[i], t = h.th || '', hl = t;
+    query.split(/[\s،,]+/).forEach(function(w){
+      if(w.length > 1) hl = hl.replace(new RegExp(w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'), '<span style="background:#fff3b0;border-radius:3px;padding:1px">$&</span>');
+    });
+    var hc = 'var(--txt3)';
+    if(h.hukm && (h.hukm.indexOf('صحيح')>=0 || h.hukm.indexOf('حسن')>=0)) hc = '#2e7d32';
+    else if(h.hukm && (h.hukm.indexOf('ضعيف')>=0)) hc = '#c62828';
+    html += '<div class="card"><div class="ch" onclick="this.nextElementSibling.classList.toggle(\'o\')"><span class="ct">' + hl + '</span>' + (h.hukm ? '<span class="hukm" style="background:'+hc+'20;color:'+hc+'">'+h.hukm.slice(0,30)+'</span>' : '') + '</div><div class="cb">' + (h.src ? '<span class="sl">📚 المصدر</span><span class="st">'+esc(h.src)+'</span>' : '') + (h.rawi ? '<span class="sl">👤 الراوي</span><span class="st">'+esc(h.rawi)+'</span>' : '') + '<button class="copy-btn" onclick="copyTxt(this)" data-t="'+escAttr(t)+'" data-s="'+escAttr(h.src||'')+'">📋 نسخ الحديث</button></div></div>';
+  }
+  if(list.length > 20) html += '<div style="text-align:center;padding:10px"><a href="https://dorar.net/hadith/search?q=' + encodeURIComponent(query) + '&st=w" target="_blank" style="color:#0F3D7A;font-size:.8rem;text-decoration:none;border:1px solid #0F3D7A;padding:6px 20px;border-radius:8px;display:inline-block">📖 عرض الكل (' + list.length + ')</a></div>';
+  document.getElementById('results').innerHTML = html;
+  document.getElementById('ifr').classList.remove('o');
+  document.getElementById('ifr-loader').style.display = 'none';
 }
 
-function showResults(list, query){
-  if(!list||!list.length){ noResults(); return; }
-  var html='<div style="margin-bottom:6px;font-size:.7rem;color:var(--txt3)">'+list.length+' نتيجة</div>';
-  var max=20;
-  for(var i=0;i<Math.min(list.length,max);i++){
-    var h=list[i],t=h.th||'',hl=t;
-    query.split(/[\s،,]+/).forEach(function(w){ if(w.length>1) hl=hl.replace(new RegExp(w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),'<span style="background:#fff3b0;border-radius:3px;padding:1px">$&</span>'); });
-    var hc='var(--txt3)';
-    if(h.hukm&&(h.hukm.indexOf('صحيح')>=0||h.hukm.indexOf('حسن')>=0)) hc='#2e7d32';
-    else if(h.hukm&&(h.hukm.indexOf('ضعيف')>=0)) hc='#c62828';
-    html+='<div class="card"><div class="ch" onclick="this.nextElementSibling.classList.toggle(\'o\')"><span class="ct">'+hl+'</span>'+(h.hukm?'<span class="hukm" style="background:'+hc+'20;color:'+hc+'">'+h.hukm.slice(0,30)+'</span>':'')+'</div><div class="cb">'+(h.src?'<span class="sl">📚 المصدر</span><span class="st">'+esc(h.src)+'</span>':'')+(h.rawi?'<span class="sl">👤 الراوي</span><span class="st">'+esc(h.rawi)+'</span>':'')+'<button class="copy-btn" onclick="copyTxt(this)" data-t="'+escAttr(t)+'" data-s="'+escAttr(h.src||'')+'">📋 نسخ الحديث</button></div></div>';
-  }
-  if(list.length>max) html+='<div style="text-align:center;padding:10px"><a href="https://dorar.net/hadith/search?q='+encodeURIComponent(query)+'" target="_blank" style="color:#0F3D7A;font-size:.8rem;text-decoration:none;border:1px solid #0F3D7A;padding:6px 20px;border-radius:8px;display:inline-block">📖 عرض الكل ('+list.length+')</a></div>';
-  $('results').innerHTML = html;
-}
 function copyTxt(btn){
-  var t=btn.getAttribute('data-t')||'',s=btn.getAttribute('data-s')||'';
-  var txt=t+(s?'\n📚 '+s:'');
+  var t = btn.getAttribute('data-t')||'', s = btn.getAttribute('data-s')||'';
+  var txt = t + (s ? '\n📚 ' + s : '');
   if(navigator.clipboard) navigator.clipboard.writeText(txt);
-  else{ var ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); }
-}
-function noResults(){ $('status').innerHTML='<div class="err-msg">📖 لا توجد أحاديث مطابقة</div>'; }
-function allFailed(query){
-  $('results').innerHTML='';
-  $('status').innerHTML='<div class="err-msg">❌ تعذر الاتصال بالموسوعة الحديثية<br><span>استخدم الطريقة المضمونة أدناه</span></div>';
-  $('altBox').style.display='block';
+  else { var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); }
 }
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function escAttr(s){ return String(s||'').replace(/"/g,'&quot;'); }
 document.addEventListener('DOMContentLoaded', function(){
-  $('#q').addEventListener('keydown', function(e){ if(e.key==='Enter') doSearch(); });
-  try{ var p=new URLSearchParams(window.location.search),q=p.get('q'); if(q&&q.trim()){ $('#q').value=q.trim(); doSearch(); } }catch(e){}
-  setTimeout(function(){ $('#q').focus(); }, 300);
+  document.getElementById('q').addEventListener('keydown', function(e){ if(e.key === 'Enter') doSearch(); });
+  try { var p = new URLSearchParams(window.location.search), q = p.get('q'); if(q && q.trim()){ document.getElementById('q').value = q.trim(); doSearch(); } } catch(e){}
+  setTimeout(function(){ document.getElementById('q').focus(); }, 300);
 });
 </script>
 </body>
