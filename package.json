@@ -1,0 +1,12 @@
+{
+  "name": "hadith-search",
+  "version": "1.0.0",
+  "description": "بحث في الموسوعة الحديثية - الدرر السنية",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>بحث الحديث - الموسوعة الحديثية</title>
+<style>
+:root{--bg:#f5f0e6;--surface:#fff;--primary:#0F3D7A;--gold:#b8942e;--text:#1e1e1e;--txt2:#5c4f3e;--txt3:#8f806c;--brd:#e2d9cc;--goldlt:#faf8f2;--rad:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:18px}
+body{font-family:'Amiri','Cairo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;padding-bottom:40px}
+.hdr{background:linear-gradient(135deg,#0a2d4f,#0F3D7A);color:#fff;padding:20px 16px;text-align:center}
+.hdr h1{font-size:1.4rem;font-weight:700}
+.hdr .sub{font-size:.8rem;opacity:.7;margin-top:2px}
+.c{max-width:700px;margin:0 auto;padding:0 14px}
+.srch{max-width:500px;margin:16px auto 0;display:flex;gap:6px;position:relative;z-index:2}
+.srch input{flex:1;padding:12px 16px;border:2px solid var(--brd);border-radius:var(--rad);font-size:.95rem;direction:rtl;background:var(--surface);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.srch input:focus{border-color:var(--gold);outline:none}
+.srch button{background:var(--primary);color:#fff;border:none;padding:12px 20px;border-radius:var(--rad);cursor:pointer;font-size:.85rem;font-weight:600;white-space:nowrap}
+.srch button:hover{opacity:.9}
+#status{font-size:.75rem;color:var(--txt3);text-align:center;padding:8px;margin:4px 0}
+#status .sp{width:24px;height:24px;border:2px solid var(--brd);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 4px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.card{background:var(--surface);border-radius:var(--rad);margin-bottom:8px;border-right:3px solid var(--primary);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.card .ch{padding:10px 14px;display:flex;justify-content:space-between;align-items:flex-start;gap:6px;cursor:pointer;user-select:none}
+.card .ch:hover{background:var(--goldlt)}
+.card .ch .ct{font-size:.9rem;color:var(--primary);font-weight:600;flex:1;line-height:1.5}
+.card .ch .hukm{font-size:.6rem;font-weight:700;white-space:nowrap;padding:2px 6px;border-radius:4px;flex-shrink:0;margin-top:2px}
+.card .cb{display:none;padding:4px 14px 12px;border-top:1px solid var(--brd)}
+.card .cb.o{display:block}
+.card .cb .sl{font-size:.68rem;color:var(--txt3);font-weight:600;display:block;margin-bottom:2px}
+.card .cb .st{font-size:.78rem;color:var(--txt2);margin-bottom:6px}
+.card .cb .copy-btn{background:var(--primary);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.72rem;margin-top:4px;font-family:inherit}
+#stats{font-size:.7rem;color:var(--txt3);text-align:center;margin:4px 0}
+.err-msg{color:#c62828;font-size:.85rem;text-align:center;padding:14px}
+.err-msg span{display:block;font-size:.75rem;color:var(--txt3);margin-top:4px}
+.err-msg a{color:#0F3D7A;font-weight:600}
+.alg{background:var(--surface);border-radius:var(--rad);padding:14px;margin-top:8px;border:2px dashed var(--gold);text-align:center}
+.alg .alt{font-size:.82rem;color:var(--gold);font-weight:700;margin-bottom:6px}
+.alg form{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.alg input{padding:8px 12px;border:1px solid var(--brd);border-radius:6px;font-size:.85rem;width:180px;direction:rtl}
+.alg button{background:#0F3D7A;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:.8rem}
+.ft{font-size:.7rem;color:var(--txt3);text-align:center;margin-top:20px}
+.ft a{color:var(--primary);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <h1>📖 الموسوعة الحديثية</h1>
+  <div class="sub">الدرر السنية — بحث في الأحاديث النبوية</div>
+</div>
+<div class="c">
+  <div class="srch">
+    <input id="q" type="text" placeholder="اكتب الحديث هنا..." autocomplete="off" style="flex:1;padding:12px 16px;border:2px solid var(--brd);border-radius:var(--rad);font-size:.95rem;direction:rtl;background:var(--surface);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.06)">
+    <button onclick="doSearch()" style="background:var(--primary);color:#fff;border:none;padding:12px 20px;border-radius:var(--rad);cursor:pointer;font-size:.85rem;font-weight:600;white-space:nowrap">🔍 بحث</button>
+  </div>
+  <div id="status"></div>
+  <div id="stats"></div>
+  <div id="results"></div>
+  <div id="altBox" class="alg" style="display:none">
+    <div class="alt">✅ بحث في موقع الدرر السنية (مضمون)</div>
+    <form action="https://dorar.net/hadith/search" target="_blank" method="get">
+      <input type="hidden" name="st" value="w">
+      <input type="text" name="q" id="altQ" placeholder="اكتب الحديث..." required>
+      <button type="submit">🔍 بحث في الدرر</button>
+    </form>
+  </div>
+  <div class="ft">📖 الموسوعة الحديثية — <a href="https://dorar.net" target="_blank">الدرر السنية</a></div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+var _abort = null;
+function doSearch(){
+  var q = $('#q').val().trim();
+  if(!q){ alert('📖 اكتب حديثاً للبحث'); return; }
+  $('#altQ').val(q);
+  $('#altBox').hide();
+  $('#status').html('<div class="sp"></div><span>📖 جاري البحث...</span>');
+  $('#stats').html('');
+  $('#results').html('');
+  if(_abort){ clearTimeout(_abort); _abort = null; }
+  tryOwnServer(q);
+}
+function tryOwnServer(query){
+  $('#status').html('<div class="sp"></div><span>📖 جاري عبر الخادم...</span>');
+  fetch('/api/dorar?q=' + encodeURIComponent(query))
+    .then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function(data){
+      clearTimeout(_abort); _abort = null;
+      if(data && data.ahadith && data.ahadith.length > 0){
+        $('#status').html('<span style="color:var(--txt3)">✅ الخادم • ' + data.ahadith.length + ' حديث</span>');
+        renderResults(data, query, 'الخادم');
+      } else { noResults(); }
+    })
+    .catch(function(){ tryMiddleware(query); });
+}
+function tryMiddleware(query){
+  $('#status').html('<div class="sp"></div><span>📖 جاري عبر الميدل وير...</span>');
+  fetch('https://dorar-hadith-api-ooo6.onrender.com/v1/api/hadith/search?value=' + encodeURIComponent(query))
+    .then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function(data){
+      clearTimeout(_abort); _abort = null;
+      if(data && data.data && data.data.length > 0){
+        var list = data.data.map(function(h){ return { th: h.hadith, rawi: h.rawi, source: h.book, hukm: h.grade }; });
+        var fakeData = { ahadith: list.filter(function(h){ return h.th; }) };
+        $('#status').html('<span style="color:var(--txt3)">✅ الميدل وير • ' + fakeData.ahadith.length + ' حديث</span>');
+        renderResults(fakeData, query, 'الميدل وير');
+      } else { noResults(); }
+    })
+    .catch(function(){ tryProxies(query); });
+}
+function tryProxies(query){
+  $('#status').html('<div class="sp"></div><span>📖 جاري عبر CORS Proxy...</span>');
+  var proxies = ['https://api.allorigins.win/raw?url=', 'https://corsproxy.io/?', 'https://api.codetabs.com/v1/proxy?quest='];
+  var apiUrl = 'https://dorar.net/dorar_api.json?skey=' + encodeURIComponent(query);
+  var idx = 0;
+  function tryNext(){
+    if(idx >= proxies.length){ clearTimeout(_abort); _abort = null; tryJSONP(query); return; }
+    var url = proxies[idx] + encodeURIComponent(apiUrl);
+    idx++;
+    $('#status').html('<div class="sp"></div><span>📖 Proxy ' + idx + '\/' + proxies.length + '...</span>');
+    fetch(url)
+      .then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function(data){
+        clearTimeout(_abort); _abort = null;
+        if(data && data.ahadith && data.ahadith.length > 0){
+          $('#status').html('<span style="color:var(--txt3)">✅ Proxy • ' + data.ahadith.length + ' حديث</span>');
+          renderResults(data, query, 'Proxy ' + idx);
+        } else { tryNext(); }
+      })
+      .catch(function(){ tryNext(); });
+  }
+  tryNext();
+}
+function tryJSONP(query){
+  $('#status').html('<div class="sp"></div><span>📖 جاري البحث (JSONP)...</span>');
+  _abort = setTimeout(function(){ _abort = null; failAll(query); }, 10000);
+  $.getJSON("http://dorar.net/dorar_api.json?skey=" + encodeURIComponent(query) + "&callback=?", function(data){
+    clearTimeout(_abort); _abort = null;
+    if(data && data.ahadith && data.ahadith.length > 0){
+      $('#status').html('<span style="color:var(--txt3)">✅ JSONP • ' + data.ahadith.length + ' حديث</span>');
+      renderResults(data, query, 'JSONP');
+    } else { noResults(); }
+  }).fail(function(){
+    $.getJSON("https://dorar.net/dorar_api.json?skey=" + encodeURIComponent(query) + "&callback=?", function(data){
+      clearTimeout(_abort); _abort = null;
+      if(data && data.ahadith && data.ahadith.length > 0){
+        $('#status').html('<span style="color:var(--txt3)">✅ JSONPS • ' + data.ahadith.length + ' حديث</span>');
+        renderResults(data, query, 'JSONPS');
+      } else { noResults(); }
+    }).fail(function(){ clearTimeout(_abort); _abort = null; failAll(query); });
+  });
+}
+function renderResults(data, query, method){
+  var list = data.ahadith;
+  var html = '<div style="margin-bottom:6px;font-size:.7rem;color:var(--txt3)">طريقة: ' + method + '</div>';
+  var maxShow = 20, count = 0;
+  $.each(list, function(idx, item){
+    if(count >= maxShow) return false;
+    count++;
+    var title = '', rawi = '', source = '', hukmStr = '';
+    if(typeof item === 'string'){ title = item; }
+    else { title = item.th || ''; rawi = item.rawi || ''; source = item.source || ''; hukmStr = item.hukm || ''; }
+    var hlTitle = $('<span>').text(title).html();
+    $.each(query.split(/[\s،,]+/), function(i,w){
+      if(w.length > 1) hlTitle = hlTitle.replace(new RegExp('(' + w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi'), '<span style="background:#fff3b0;border-radius:3px;padding:1px">$1</span>');
+    });
+    var hukmColor = 'var(--txt3)';
+    if(hukmStr.indexOf('صحيح')>=0 || hukmStr.indexOf('حسن')>=0) hukmColor = '#2e7d32';
+    else if(hukmStr.indexOf('ضعيف')>=0) hukmColor = '#c62828';
+    var te = title.replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    var se = source.replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    html += '<div class="card"><div class="ch" onclick="$(this).next().toggleClass(\'o\')"><span class="ct">' + hlTitle + '</span>' + (hukmStr ? '<span class="hukm" style="background:'+hukmColor+'20;color:'+hukmColor+'">'+hukmStr+'</span>' : '') + '</div><div class="cb">' + (source ? '<span class="sl">📚 المصدر</span><span class="st">'+source+'</span>' : '') + (rawi ? '<span class="sl">👤 الراوي</span><span class="st">'+rawi+'</span>' : '') + '<button class="copy-btn" data-txt="'+te+'" data-src="'+se+'">📋 نسخ الحديث</button></div></div>';
+  });
+  $('#stats').html(count + ' نتيجة • ' + query);
+  $('#results').html(html);
+  if(list.length > maxShow) $('#results').append('<div style="text-align:center;padding:10px 0 20px"><a href="https://dorar.net/hadith/search?q=' + encodeURIComponent(query) + '" target="_blank" style="color:#0F3D7A;font-size:.8rem;text-decoration:none;border:1px solid #0F3D7A;padding:6px 20px;border-radius:8px;display:inline-block">📖 عرض الكل (' + list.length + ')</a></div>');
+  $('.copy-btn').off('click').on('click', function(){
+    var t = $(this).data('txt')||'', s = $(this).data('src')||'';
+    var txt = t + (s ? '\n📚 ' + s : '');
+    if(navigator.clipboard) navigator.clipboard.writeText(txt);
+    else { var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); }
+  });
+}
+function noResults(){ $('#status').html('<div class="err-msg">📖 لا توجد أحاديث مطابقة</div>'); }
+function failAll(query){
+  $('#results').html('');
+  $('#status').html('<div class="err-msg">❌ تعذر الاتصال بخادم الدرر السنية<br><span>استخدم الطريقة البديلة أدناه للبحث في الموقع مباشرة</span></div>');
+  $('#altBox').show();
+}
+$(document).ready(function(){
+  $('#q').keydown(function(e){ if(e.key === 'Enter') doSearch(); });
+  try { var p = new URLSearchParams(window.location.search), q = p.get('q'); if(q && q.trim()){ $('#q').val(q.trim()); doSearch(); } else setTimeout(function(){ $('#q').focus(); }, 300); } catch(e){ setTimeout(function(){ $('#q').focus(); }, 300); }
+});
+</script>
+</body>
+</html>
